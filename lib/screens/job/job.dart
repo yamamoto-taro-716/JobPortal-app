@@ -7,6 +7,7 @@ import 'package:app/models/job_categories.dart';
 import 'package:app/models/user.dart';
 import 'package:app/public/colors.dart';
 import 'package:app/public/strings.dart' as Strings;
+import 'package:app/screens/job/applysheet.dart';
 import 'package:app/utils/utils.dart' as Utils;
 import 'package:app/screens/contract/contract.dart';
 import 'package:app/widgets/job_card.dart';
@@ -17,9 +18,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:http/http.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
-import 'package:app/screens/contract/messagebox.dart';
 import 'package:app/screens/job/contracts.dart';
 
 class JobScreen extends StatefulWidget {
@@ -33,12 +34,10 @@ class JobScreenState extends State<JobScreen> {
   var job = new Job();
   var client = new User();
   var applied = false;
+
   List<JobCategory> jobTypes = [];
   List<dynamic> contracts = [];
-  TextEditingController phoneController = new TextEditingController();
-  TextEditingController budgetController = new TextEditingController();
-  TextEditingController deadlineController = new TextEditingController();
-  TextEditingController messageController = new TextEditingController();
+
   getJob() async {
     setState(() {
       isLoading = true;
@@ -61,135 +60,31 @@ class JobScreenState extends State<JobScreen> {
     });
   }
 
-  doAction() {
-    var deadline;
+  doAction() async {
+    bool cancelled = false;
     if (applied)
-      Navigator.push(
+      cancelled = await Navigator.push(
           context,
           new CupertinoPageRoute(
               builder: (context) => ContractScreen(jobId: widget.jobId)));
-    else
-      showModalBottomSheet(
+    else {
+      var applied = await showModalBottomSheet(
           isScrollControlled: true,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
           // expand: false,
           context: context,
-          builder: (context) {
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              height: 540,
-              // decoration: BoxDecoration(
-              //     borderRadius:
-              //         BorderRadius.vertical(top: Radius.circular(16))),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 32),
-                    Text(
-                      Strings.phoneNumber,
-                      style: TextStyle(color: MainBlack),
-                    ),
-                    SizedBox(height: 8),
-                    CustomInputField(
-                      borderColor: WeakGrey,
-                      placeHolder: Strings.phoneNumber,
-                      controller: phoneController,
-                      textInputType: TextInputType.phone,
-                    ),
-                    SizedBox(height: 12),
-                    Text(
-                      Strings.contractAmount,
-                      style: TextStyle(color: MainBlack),
-                    ),
-                    SizedBox(height: 8),
-                    CustomInputField(
-                        borderColor: WeakGrey,
-                        placeHolder: Strings.contractAmount,
-                        textInputType: TextInputType.number,
-                        controller: budgetController,
-                        suffixIcon: Container(
-                            width: 12,
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.only(right: 18),
-                            child: Text(
-                              '円',
-                              style: TextStyle(color: MainBlue),
-                            ))),
-                    SizedBox(height: 12),
-                    Text(
-                      Strings.estDeadline,
-                      style: TextStyle(color: MainBlack),
-                    ),
-                    SizedBox(height: 8),
-                    CustomInputField(
-                        borderColor: WeakGrey,
-                        placeHolder: Strings.estDeadline,
-                        controller: deadlineController,
-                        readOnly: true,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            Icons.insert_invitation,
-                            color: MainBlue,
-                          ),
-                          splashRadius: 20,
-                          color: MainBlue,
-                          onPressed: () async {
-                            deadline = await showRoundedDatePicker(
-                                context: context, initialDate: DateTime.now());
-                            if (deadline == null) return;
-                            deadlineController.text =
-                                Utils.formatDate(deadline);
-                            setState(() {});
-                          },
-                        )),
-                    SizedBox(height: 12),
-                    Text(
-                      Strings.applyMessage,
-                      style: TextStyle(color: MainBlack),
-                    ),
-                    SizedBox(height: 8),
-                    CustomInputField(
-                      borderColor: WeakGrey,
-                      placeHolder: Strings.applyMessage,
-                      lines: 10,
-                      height: 160.0,
-                      alignment: Alignment.topLeft,
-                      paddingTop: 8,
-                      controller: messageController,
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        customElevatedButton(
-                          text: Strings.applytoThis,
-                          backColor: MainRed,
-                          onPressed: () async {
-                            var r = await messageBox(context,
-                                content: Strings.declineClientOffer);
-                            if (!r) return;
-
-                            var res = await UserApi.applyJob(
-                                job.id,
-                                phoneController.text,
-                                budgetController.text,
-                                messageController.text,
-                                deadline.toString());
-                            if (res['success']) {
-                              setState(() => applied = true);
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
+          builder: (context) => ApplySheet(jobId: job.id));
+      if (applied == null) applied = false;
+      this.applied = applied;
+      setState(() {});
+      if (this.applied)
+        cancelled = await Navigator.push(
+            context,
+            new CupertinoPageRoute(
+                builder: (context) => ContractScreen(jobId: widget.jobId)));
+    }
+    if (cancelled) setState(() => applied = false);
   }
 
   @override

@@ -65,6 +65,18 @@ class ContractScreenState extends State<ContractScreen> {
     // setState(() => isLoading = false);
   }
 
+  cancelApply() async {
+    var r = await messageBox(context,
+        content: '応募をキャンセルしてもよろしいですか？',
+        yes: Strings.cancelApply,
+        no: Strings.closeMessage);
+    if (!r) return;
+    setState(() => isLoading = true);
+    var res = await UserApi.cancelApply(contract.id);
+    setState(() => isLoading = false);
+    if (res) Navigator.of(context).pop(true);
+  }
+
   requestFinish() async {
     var r = await messageBox(context, content: Strings.sendFinishRequest);
     if (r == null) return;
@@ -99,7 +111,7 @@ class ContractScreenState extends State<ContractScreen> {
                 ),
                 centerTitle: true,
                 leading: BackButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.of(context).pop(false),
                   color: MainBlue,
                 ),
                 elevation: 0.0,
@@ -123,7 +135,18 @@ class ContractScreenState extends State<ContractScreen> {
     var widget;
     if (contract.step == 0) {
       if (contract.providerAgreed && !contract.clientAgreed)
-        widget = Text("お客様の同意を待っています。");
+        widget = Column(children: [
+          Text("お客様の同意を待っています。"),
+          SizedBox(height: 6),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            customElevatedButton(
+                text: Strings.cancelApply,
+                backColor: MainRed,
+                height: 32.0,
+                textColor: MainWhite,
+                onPressed: cancelApply)
+          ])
+        ]);
       else if (!contract.providerAgreed && contract.clientAgreed)
         widget = Column(
           children: [

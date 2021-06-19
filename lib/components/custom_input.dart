@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 class CustomInputField extends StatefulWidget {
   final TextEditingController controller;
-  final Function validator;
+  final FormFieldValidator<String> validator;
   final Function onChanged;
   final String placeHolder;
   final String labelText;

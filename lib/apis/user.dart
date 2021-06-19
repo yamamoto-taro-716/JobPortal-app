@@ -60,6 +60,11 @@ class UserApi {
     return res;
   }
 
+  static cancelApply(contractId) async {
+    var res = await get('/api/user/cancelapply/$contractId');
+    return res['success'];
+  }
+
   static acceptClientOffer(contractId) async {
     var res = await get('/api/user/acceptclientoffer/$contractId');
     return res;

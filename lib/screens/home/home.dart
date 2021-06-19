@@ -87,7 +87,11 @@ class HomeState extends State<Home> {
 
       isLoading = false;
       setState(() {});
-    } catch (error) {}
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   getCategories() async {
