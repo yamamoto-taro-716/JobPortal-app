@@ -50,6 +50,10 @@ const phoneNumber = '電話番号';
 const contractAmount = '契約金額';
 const estDeadline = '完了予定日';
 const applyMessage = 'メッセージ';
+const applied = '申請した';
+const progressing = '進行中';
+const finished = '完了した';
+const favorite = 'お気に入り';
 const budgetRange = [
   '作業者と相談',
   '〜1万円',

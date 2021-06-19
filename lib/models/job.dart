@@ -11,6 +11,7 @@ class Job {
   DateTime date;
   DateTime deadLine;
   int budgetRange;
+  bool favorite;
   Job(
       {this.id,
       this.title,
@@ -23,8 +24,9 @@ class Job {
       this.budgetRange,
       this.clientName,
       this.clientPhotoUrl,
-      this.deadLine});
-  fromJson(Map<String, dynamic> json) {
+      this.deadLine,
+      this.favorite = false});
+  Job.fromJson(Map<String, dynamic> json) {
     this.id = json['_id'];
     this.title = json['title'];
     this.description = json['description'];
@@ -38,6 +40,11 @@ class Job {
     this.budgetRange = json['budget_range'];
     this.deadLine =
         json['dead_line'] == null ? null : DateTime.parse(json['dead_line']);
+    this.favorite = json['favorite'] == null ? false : json['favorite'];
+  }
+
+  static List<Job> fromJsonList(jsonList) {
+    return jsonList.map<Job>((job) => Job.fromJson(job)).toList();
   }
 
   toJson() {

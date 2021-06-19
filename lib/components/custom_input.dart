@@ -22,6 +22,7 @@ class CustomInputField extends StatefulWidget {
   final bool readOnly;
   final double height;
   final Alignment alignment;
+  final double paddingTop;
   CustomInputField(
       {Key key,
       @required this.placeHolder,
@@ -42,6 +43,7 @@ class CustomInputField extends StatefulWidget {
       this.readOnly = false,
       this.alignment = Alignment.center,
       this.height = 40.0,
+      this.paddingTop = 0,
       this.obscureText = false})
       : super(key: key);
 
@@ -49,52 +51,55 @@ class CustomInputField extends StatefulWidget {
 }
 
 class _CustomInputFieldState extends State<CustomInputField> {
+  var outlineBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(24.0)),
+      borderSide: BorderSide(
+        color: MainTrans,
+      ));
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      alignment: widget.alignment,
-      decoration: BoxDecoration(
-        color: widget.backColor,
-        border: Border.all(color: widget.borderColor),
-        borderRadius: BorderRadius.all(Radius.circular(24.0)),
-      ),
-      padding: const EdgeInsets.only(left: 12.0, right: 0, top: 0, bottom: 0),
-      child: TextFormField(
-        textAlignVertical: TextAlignVertical.center,
-        onChanged: widget.onChanged,
-        readOnly: widget.readOnly,
-        enabled: widget.enabled,
-        inputFormatters: widget.inputFormatters,
-        validator: widget.validator,
-        controller: widget.controller,
-        maxLines: widget.lines,
-        autocorrect: false,
-        autofocus: widget.autoFocus,
-        keyboardType: widget.textInputType,
-        focusNode: widget.focusNode,
-        cursorColor: MainGrey,
-        obscureText: widget.obscureText,
-        style: TextStyle(color: MainBlack),
-        decoration: InputDecoration(
-            prefixIcon: widget.prefixIcon,
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            // enabledBorder: OutlineInputBorder(
-            //     borderRadius: BorderRadius.all(Radius.circular(24.0)),
-            //     borderSide: BorderSide(
-            //       color: MainBlue,
-            //     )),
-            // disabledBorder: new UnderlineInputBorder(
-            //   borderSide: BorderSide(color: MainGreen),
-            // ),
-            suffixIcon: widget.suffixIcon,
-            hintStyle: TextStyle(color: MainGrey, fontSize: 14.0),
-            hintText: widget.placeHolder,
-            labelStyle: TextStyle(color: MainGrey),
-            labelText:
-                widget.labelText == '' ? widget.placeHolder : widget.labelText),
-      ),
-    );
+        height: widget.height,
+        alignment: widget.alignment,
+        decoration: BoxDecoration(
+          color: widget.backColor,
+          border: Border.all(color: widget.borderColor),
+          borderRadius: BorderRadius.all(Radius.circular(24.0)),
+        ),
+        padding: EdgeInsets.only(
+            left: 12.0, right: 0, top: widget.paddingTop, bottom: 0),
+        child: TextFormField(
+          textAlignVertical: TextAlignVertical.center,
+          onChanged: widget.onChanged,
+          readOnly: widget.readOnly,
+          enabled: widget.enabled,
+          inputFormatters: widget.inputFormatters,
+          validator: widget.validator,
+          controller: widget.controller,
+          maxLines: widget.lines,
+          autocorrect: false,
+          autofocus: widget.autoFocus,
+          keyboardType: widget.textInputType,
+          focusNode: widget.focusNode,
+          cursorColor: MainGrey,
+          obscureText: widget.obscureText,
+          style: TextStyle(color: MainBlack),
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(0),
+              prefixIcon: widget.prefixIcon,
+              border: outlineBorder,
+              focusedBorder: outlineBorder,
+              enabledBorder: outlineBorder,
+              disabledBorder: new UnderlineInputBorder(
+                borderSide: BorderSide(color: MainTrans),
+              ),
+              suffixIcon: widget.suffixIcon,
+              hintStyle: TextStyle(color: MainGrey, fontSize: 14.0),
+              hintText: widget.placeHolder,
+              labelStyle: TextStyle(color: MainGrey),
+              labelText: widget.labelText == ''
+                  ? widget.placeHolder
+                  : widget.labelText),
+        ));
   }
 }

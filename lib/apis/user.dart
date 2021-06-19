@@ -15,12 +15,19 @@ class UserApi {
   }
 
   static getJobsofDays(DateTime from, DateTime to,
-      {String keyword = '', int category = 0}) async {
+      {String keyword = '',
+      int category = 0,
+      int filter = 0,
+      pageIndex = 0,
+      pageSize}) async {
     var res = await post('/api/user/getjobs', {
       'from': from.toUtc().toString(),
       'to': to.toUtc().toString(),
       'keyword': keyword,
-      'category': category
+      'category': category,
+      'filter': filter,
+      'pageIndex': pageIndex,
+      'pageSize': pageSize
     });
     return res;
   }
@@ -60,6 +67,21 @@ class UserApi {
 
   static requestFinish(contractId) async {
     var res = await get('/api/user/requestfinish/$contractId');
+    return res;
+  }
+
+  static addFavorite(jobId) async {
+    var res = await get('/api/user/addfavorite/$jobId');
+    return res;
+  }
+
+  static removeFavorite(jobId) async {
+    var res = await get('/api/user/removefavorite/$jobId');
+    return res;
+  }
+
+  static toggleFavorite(jobId) async {
+    var res = await get('/api/user/togglefavorite/$jobId');
     return res;
   }
 }

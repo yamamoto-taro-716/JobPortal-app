@@ -15,7 +15,18 @@ import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 class SearchSheet extends StatefulWidget {
   final List<JobCategory> categories;
-  SearchSheet({this.categories});
+  final DateTime from;
+  final DateTime to;
+  final String keyword;
+  final int category;
+  final bool pastweek;
+  SearchSheet(
+      {this.categories,
+      this.from,
+      this.to,
+      this.keyword = "",
+      this.category,
+      this.pastweek = true});
   @override
   State<StatefulWidget> createState() {
     return SearchSheetState();
@@ -73,7 +84,15 @@ class SearchSheetState extends State<SearchSheet> {
   @override
   void initState() {
     super.initState();
-    setPastWeek();
+    keywordText.text = widget.keyword;
+    curCategory = widget.category;
+    this.dateFrom = widget.from;
+    this.dateTo = widget.to;
+    // this.keywordText = widget.keyword;
+    this.curCategory = widget.category;
+    this.bPastWeek = widget.pastweek;
+    if (!bPastWeek) setDuration();
+    // setPastWeek();
   }
 
   @override

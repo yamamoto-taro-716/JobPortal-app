@@ -36,10 +36,10 @@ class NavDrawer extends StatelessWidget {
                                 image: imageProvider, fit: BoxFit.cover)),
                       ),
                       placeholder: (context, url) =>
-                          CircularProgressIndicator(),
+                          Center(child: CircularProgressIndicator()),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    SizedBox(height: 12),
+                    SizedBox(height: 6),
                     Text(
                       profile.fullName,
                       style: TextStyle(color: MainWhite, fontSize: 20),

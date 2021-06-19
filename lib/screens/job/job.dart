@@ -45,7 +45,7 @@ class JobScreenState extends State<JobScreen> {
     });
     var res = await UserApi.getJobDetail(widget.jobId);
     if (res['success']) {
-      job.fromJson(res['result']['job']);
+      job = Job.fromJson(res['result']['job']);
       client.fromJson(res['result']['job']['client_id']);
       applied = res['result']['applied'];
       for (var json in res['result']['jobTypes']) {
@@ -55,6 +55,7 @@ class JobScreenState extends State<JobScreen> {
       }
       contracts = res['result']['contracts'];
     }
+    // await Future.delayed(Duration(seconds: 3));
     setState(() {
       isLoading = false;
     });
@@ -155,6 +156,7 @@ class JobScreenState extends State<JobScreen> {
                       lines: 10,
                       height: 160.0,
                       alignment: Alignment.topLeft,
+                      paddingTop: 8,
                       controller: messageController,
                     ),
                     SizedBox(height: 12),
@@ -219,10 +221,12 @@ class JobScreenState extends State<JobScreen> {
                 backgroundColor: MainWhite,
               ),
               body: jobScreen(),
-              floatingActionButton: customElevatedButton(
-                  text: applied ? Strings.toContract : Strings.applytoThis,
-                  backColor: MainRed,
-                  onPressed: doAction),
+              floatingActionButton: isLoading
+                  ? Container()
+                  : customElevatedButton(
+                      text: applied ? Strings.toContract : Strings.applytoThis,
+                      backColor: MainRed,
+                      onPressed: doAction),
             )));
   }
 

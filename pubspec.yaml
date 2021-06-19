@@ -35,6 +35,9 @@ dependencies:
   flutter_rounded_date_picker: 2.0.2
   smooth_star_rating: 1.1.1
   flutter_phoenix: "^1.0.0"
+  pull_to_refresh: ^2.0.0
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

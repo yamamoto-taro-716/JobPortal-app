@@ -33,7 +33,7 @@ class ContractScreenState extends State<ContractScreen> {
     setState(() => isLoading = true);
     var res = await UserApi.getContract(widget.jobId);
     if (res['success']) {
-      job.fromJson(res['result']['job']);
+      job = Job.fromJson(res['result']['job']);
       if (res['result']['contract'] != null) {
         contract.fromJson(res['result']['contract']);
         applied = true;
@@ -108,11 +108,13 @@ class ContractScreenState extends State<ContractScreen> {
               body: jobScreen(),
               floatingActionButton: Container(
                   width: 40,
-                  child: FloatingActionButton(
-                    backgroundColor: MainBlue,
-                    child: Icon(Icons.chat, size: 20),
-                    onPressed: () {},
-                  )),
+                  child: isLoading
+                      ? Container()
+                      : FloatingActionButton(
+                          backgroundColor: MainBlue,
+                          child: Icon(Icons.chat, size: 20),
+                          onPressed: () {},
+                        )),
             )));
   }
 
@@ -377,7 +379,7 @@ class ContractScreenState extends State<ContractScreen> {
                                     image: imageProvider, fit: BoxFit.cover)),
                           ),
                           placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                              Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                         ),

@@ -71,7 +71,7 @@ class Contracts extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15)),
             image: DecorationImage(image: imageProvider, fit: BoxFit.cover)),
       ),
-      placeholder: (context, url) => CircularProgressIndicator(),
+      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
       errorWidget: (context, url, error) => Icon(Icons.error),
     );
   }

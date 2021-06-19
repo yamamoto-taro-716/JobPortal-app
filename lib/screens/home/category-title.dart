@@ -36,3 +36,29 @@ Widget categoryTitle(List<JobCategory> categories, int curCategory, onPressed) {
     ),
   );
 }
+
+Widget filterOption(List<String> filters, int index, onPressed) {
+  List<Widget> widgets = [];
+  for (var i = 0; i < filters.length; i++) {
+    widgets.add(customElevatedButton(
+        backColor: index == i ? MainRed : WeekGrey,
+        textColor: index == i ? MainWhite : MainBlack,
+        text: filters[i],
+        fontSize: 12.0,
+        height: 28.0,
+        onPressed: () => onPressed(i)));
+  }
+
+  return Container(
+    color: MainTrans,
+    height: 50,
+    margin: EdgeInsets.symmetric(horizontal: 8),
+    width: double.infinity,
+    child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: widgets,
+      ),
+    ),
+  );
+}

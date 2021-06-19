@@ -152,7 +152,7 @@ class LoginState extends State<Login> {
       sp.setString('profile', profile);
       setState(() => isLoading = false);
       Navigator.pushReplacementNamed(context, HOME_SCREEN);
-    }
-    setState(() => isLoading = false);
+    } else
+      setState(() => isLoading = false);
   }
 }

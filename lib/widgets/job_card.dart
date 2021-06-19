@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-Widget jobCard(Job job, onTap) {
+Widget jobCard(Job job, onTap, onFavorite) {
   var borderRadius = BorderRadius.all(Radius.circular(4));
 
   return Container(
@@ -49,7 +49,7 @@ Widget jobCard(Job job, onTap) {
                                 image: imageProvider, fit: BoxFit.cover)),
                       ),
                       placeholder: (context, url) =>
-                          CircularProgressIndicator(),
+                          Center(child: CircularProgressIndicator()),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                     Container(
@@ -82,8 +82,10 @@ Widget jobCard(Job job, onTap) {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Container(
+                                // height: 24,
                                 constraints: BoxConstraints(maxWidth: 120),
                                 // width: 120,
+                                // alignment: Alignment.centerRight,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 2),
                                 margin: EdgeInsets.symmetric(
@@ -143,16 +145,13 @@ Widget jobCard(Job job, onTap) {
                         Material(
                             color: MainTrans,
                             child: IconButton(
-                              icon: Icon(
-                                Icons.favorite,
-                                color: MainGrey,
-                              ),
-                              splashRadius: 20,
-                              color: MainBlue,
-                              onPressed: () {
-                                print('dsf');
-                              },
-                            ))
+                                icon: Icon(
+                                  Icons.favorite,
+                                  color: job.favorite ? WeakRed : MainGrey,
+                                ),
+                                splashRadius: 20,
+                                color: MainBlue,
+                                onPressed: onFavorite))
                       ],
                     )
                   ],
